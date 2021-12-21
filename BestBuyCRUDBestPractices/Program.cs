@@ -11,7 +11,35 @@ namespace BestBuyCRUDBestPractices
     {
         static void Main(string[] args)
         {
-            #region Configuration 
+            var config = new ConfigurationBuilder()
+                 .SetBasePath(Directory.GetCurrentDirectory())
+                 .AddJsonFile("appsettings.json")
+                 .Build();
+
+            string connString = config.GetConnectionString("DefaultConnection");
+
+            IDbConnection connection = new MySqlConnection(connString);
+
+            var repo = new DapperProductRepository(connection);
+
+            repo.CreateProduct("newStuff", 20, 1);
+
+            var products = repo.GetAllProducts();
+
+            foreach (var product in products)
+            {
+                Console.WriteLine($"{product.ProductId} {product.Name}");
+            }
+        }
+
+
+
+
+
+
+
+
+            /*#region Configuration 
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
@@ -52,7 +80,7 @@ namespace BestBuyCRUDBestPractices
                 {
                     Console.WriteLine($"Id: {depo.DepartmentId} Name: {depo.Name}");
                 }
-            }
+            }*/
 
 
         
